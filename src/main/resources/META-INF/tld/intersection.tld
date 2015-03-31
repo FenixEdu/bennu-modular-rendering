@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright © 2002 Instituto Superior Técnico
+
+    This file is part of FenixEdu Academic.
+
+    FenixEdu Academic is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    FenixEdu Academic is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public License
+    along with FenixEdu Academic.  If not, see <http://www.gnu.org/licenses/>.
+
+-->
+<!DOCTYPE taglib
+        PUBLIC "-//Sun Microsystems, Inc.//DTD JSP Tag Library 1.2//EN"
+        "http://java.sun.com/dtd/web-jsptaglibrary_1_2.dtd">
+
+<taglib>
+    <!-- ========== Tag Library Description Elements ========================= -->
+
+
+    <tlib-version>1.0</tlib-version>
+    <jsp-version>1.2</jsp-version>
+    <short-name>r</short-name>
+    <uri>http://fenixedu.org/taglib/intersection</uri>
+    <description>
+        Intersection Tag Library
+    </description>
+
+    <!-- ========== Tag Descriptions ========================================= -->
+
+    <tag>
+        <name>intersect</name>
+        <tag-class>org.fenixedu.bennu.rendering.tags.IntersectionTag</tag-class>
+        <body-content>JSP</body-content>
+        <description>
+            Injects content that matches the selected location/position pair
+        </description>
+
+        <attribute>
+            <name>location</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <description>
+                Location Name
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>position</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <description>
+                Position name
+            </description>
+        </attribute>
+    </tag>
+
+    <tag>
+        <name>arg</name>
+        <tag-class>org.fenixedu.bennu.rendering.tags.ArgTag</tag-class>
+        <body-content>empty</body-content>
+        <description>
+            Adds arguments to the intersection
+        </description>
+
+        <attribute>
+            <name>key</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+            <description>
+                Key for this argument
+            </description>
+        </attribute>
+
+        <attribute>
+            <name>value</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <description>
+                Value for this argument
+            </description>
+        </attribute>
+    </tag>
+</taglib>
