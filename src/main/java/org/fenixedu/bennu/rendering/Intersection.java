@@ -26,7 +26,6 @@ public class Intersection {
 
     private IntersectionHandler callback;
 
-
     private Intersection(String location, String position, int priority, IntersectionHandler callback) {
         this.priority = priority;
         this.location = location;
@@ -38,42 +37,48 @@ public class Intersection {
      * This function will call all intersection handlers for a given location and position, and pass them a set of arguments.
      * Arguments allow intersection points to have some context.
      *
-     * @param writer the writer to where the result will be flushed
+     * @param writer   the writer to where the result will be flushed
      * @param location the intersection point location name
      * @param position the intersection point position name
-     * @param args a map of arguments.
+     * @param args     a map of arguments.
      */
     public static void generate(final String location, final String position, Map<String, Object> args, final Writer writer) {
         String pos;
-        if (position == null){
+        if (position == null) {
             pos = "";
-        }else{
+        } else {
             pos = position;
         }
 
         Map<String, Object> possibleArgs;
-        if (args == null){
+        if (args == null) {
             possibleArgs = new HashMap<>();
-        }else{
+        } else {
             possibleArgs = args;
         }
         Map<String, Object> arguments = Collections.unmodifiableMap(possibleArgs);
-        INTERSECTORS.get(location + "$$" + pos).stream().sorted(Comparator.comparingInt(x -> x.priority)).map((x) -> {
-            try {
-                return x.callback.apply(new IntersectionEvent(location, pos, x.priority), arguments);
-            } catch (Throwable e) {
-                LOGGER.error("Error while processing partial", e);
-            }
-            return new StringView("");
-        }).forEach(x -> {
-            try {
-                x.render(arguments, writer);
-            } catch (Exception e) {
-                LOGGER.error("Error while writing partial to writer", e);
-            }
-        });
+        Optional.ofNullable(INTERSECTORS.get(getKey(location, pos)))
+                .ifPresent(handlers -> handlers.stream().sorted(Comparator.comparingInt(x -> x.priority)).map((x) -> {
+                    try {
+                        return x.callback.apply(new IntersectionEvent(location, pos, x.priority), arguments);
+                    } catch (Throwable e) {
+                        LOGGER.error("Error while processing partial", e);
+                    }
+                    return new StringView("");
+                }).forEach(x -> {
+                    try {
+                        if (x != null) {
+                            x.render(arguments, writer);
+                        }
+                    } catch (Exception e) {
+                        LOGGER.error("Error while writing partial to writer", e);
+                    }
+                }));
     }
 
+    private static String getKey(String location, String pos) {
+        return location + "$$" + pos;
+    }
 
     /**
      * This method allows to register a handler. Each handler must be registed at a location and a optional position and
@@ -85,8 +90,8 @@ public class Intersection {
      * @param priority the priority for this handler
      * @param callback the actualy callback
      */
-    public static void at(String location, String position, Integer priority, IntersectionHandler callback) {
-        List<Intersection> callbacks = INTERSECTORS.get(location + "$$" + position);
+    public static RegistrationHandler at(String location, String position, Integer priority, IntersectionHandler callback) {
+        List<Intersection> callbacks = INTERSECTORS.get(getKey(location, position));
 
         if (position == null) {
             position = "";
@@ -94,40 +99,61 @@ public class Intersection {
 
         if (callbacks == null) {
             callbacks = new ArrayList<>();
-            INTERSECTORS.put(location + "$$" + position, callbacks);
+            INTERSECTORS.put(getKey(location, position), callbacks);
         }
 
         int pri;
-        if (priority == null){
+        if (priority == null) {
             pri = Integer.MAX_VALUE;
-        }else{
+        } else {
             pri = priority;
         }
 
-        callbacks.add(new Intersection(location, position, pri, callback));
+        Intersection i = new Intersection(location, position, pri, callback);
+        callbacks.add(i);
+        return i.makeRegistrationHandler();
     }
 
     /**
-     * This method allows to register a handler. Similar to {@link org.fenixedu.bennu.rendering.Intersection#at(String, String, Integer, java.util.function.BiFunction)}
+     * This method allows to register a handler. Similar to {@link org.fenixedu.bennu.rendering.Intersection#at(String, String, Integer, IntersectionHandler)}
      * but default priority.
      *
      * @param location the intersection point location name
      * @param position the intersection point position name
      * @param callback the actualy callback
      */
-    public static void at(String location, String position, IntersectionHandler callback) {
-        at(location, position, Integer.MAX_VALUE, callback);
+    public static RegistrationHandler at(String location, String position, IntersectionHandler callback) {
+        return at(location, position, Integer.MAX_VALUE, callback);
     }
 
     /**
-     * This method allows to register a handler. Similar to {@link org.fenixedu.bennu.rendering.Intersection#at(String, String, Integer, java.util.function.BiFunction)}
+     * This method allows to register a handler. Similar to {@link org.fenixedu.bennu.rendering.Intersection#at(String, String, Integer, IntersectionHandler)}
      * but default priority and empty position.
      *
      * @param location the intersection point location name
      * @param callback the actualy callback
      */
-    public static void at(String location, IntersectionHandler callback) {
-        at(location, "", Integer.MAX_VALUE, callback);
+    public static RegistrationHandler at(String location, IntersectionHandler callback) {
+        return at(location, "", Integer.MAX_VALUE, callback);
+    }
+
+    private RegistrationHandler makeRegistrationHandler() {
+        return new RegistrationHandler();
+    }
+
+
+    /**
+     * This class serves a way to remove pragmatically remove handlers after being declared.
+     */
+    public class RegistrationHandler {
+
+        /**
+         * This method removes the intersection point handler, that was registered when this handler was created.
+         */
+        public void unregister() {
+            List<Intersection> intersections = INTERSECTORS.get(getKey(Intersection.this.location, Intersection.this.position));
+            intersections.remove(Intersection.this);
+        }
     }
 }
 
