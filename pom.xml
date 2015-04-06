@@ -15,6 +15,7 @@
 
     <properties>
         <version.javax.servlet.jsp.jsp.api>2.2.1-b03</version.javax.servlet.jsp.jsp.api>
+        <version.com.mitchellbosecke.pebble>1.4.0</version.com.mitchellbosecke.pebble>
     </properties>
 
     <dependencies>
@@ -23,6 +24,13 @@
             <artifactId>jsp-api</artifactId>
             <version>${version.javax.servlet.jsp.jsp.api}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.mitchellbosecke</groupId>
+            <artifactId>pebble</artifactId>
+            <version>${version.com.mitchellbosecke.pebble}</version>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 

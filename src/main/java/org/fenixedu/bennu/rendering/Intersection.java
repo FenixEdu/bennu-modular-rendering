@@ -1,12 +1,15 @@
 package org.fenixedu.bennu.rendering;
 
+import org.fenixedu.bennu.rendering.view.StringView;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Writer;
 import java.util.*;
-import java.util.function.BiFunction;
-import java.util.stream.Collectors;
 
 /**
  * This class is the main interface for doing template rendering. Each template declares places that wishes to possible
- * to add more stuff. Each intersection point is composed of location and a optional position. The location is supose to
+ * to add more stuff. Each intersection point is composed of location and a optional position. The location is suppose to
  * be constant within the same template, and the position declares in what places can be added more html code (e.g.
  * location="cms.list.sites" position="management.buttons"). Handlers can declare a priority that allows them to be
  * place in some order.
@@ -16,15 +19,15 @@ import java.util.stream.Collectors;
 public class Intersection {
 
     private static final Map<String, List<Intersection>> INTERSECTORS = new HashMap<>();
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(Intersection.class);
     private int priority = Integer.MAX_VALUE;
     private String location;
     private String position;
 
-    private BiFunction<IntersectionEvent, Map<String, Object>, String> callback;
+    private IntersectionHandler callback;
 
 
-    private Intersection(String location, String position, int priority, BiFunction<IntersectionEvent, Map<String, Object>, String> callback) {
+    private Intersection(String location, String position, int priority, IntersectionHandler callback) {
         this.priority = priority;
         this.location = location;
         this.position = position;
@@ -35,12 +38,12 @@ public class Intersection {
      * This function will call all intersection handlers for a given location and position, and pass them a set of arguments.
      * Arguments allow intersection points to have some context.
      *
+     * @param writer the writer to where the result will be flushed
      * @param location the intersection point location name
      * @param position the intersection point position name
      * @param args a map of arguments.
-     * @return
      */
-    public static String generate(final String location, final String position, Map<String, Object> args) {
+    public static void generate(final String location, final String position, Map<String, Object> args, final Writer writer) {
         String pos;
         if (position == null){
             pos = "";
@@ -54,15 +57,21 @@ public class Intersection {
         }else{
             possibleArgs = args;
         }
-        
-        return INTERSECTORS.get(location + "$$" + pos).stream().sorted(Comparator.comparingInt(x -> x.priority)).map((x) -> {
+        Map<String, Object> arguments = Collections.unmodifiableMap(possibleArgs);
+        INTERSECTORS.get(location + "$$" + pos).stream().sorted(Comparator.comparingInt(x -> x.priority)).map((x) -> {
             try {
-                return x.callback.apply(new IntersectionEvent(location, pos, x.priority), Collections.unmodifiableMap(possibleArgs));
+                return x.callback.apply(new IntersectionEvent(location, pos, x.priority), arguments);
             } catch (Throwable e) {
-
+                LOGGER.error("Error while processing partial", e);
             }
-            return "";
-        }).collect(Collectors.joining(""));
+            return new StringView("");
+        }).forEach(x -> {
+            try {
+                x.render(arguments, writer);
+            } catch (Exception e) {
+                LOGGER.error("Error while writing partial to writer", e);
+            }
+        });
     }
 
 
@@ -76,7 +85,7 @@ public class Intersection {
      * @param priority the priority for this handler
      * @param callback the actualy callback
      */
-    public static void at(String location, String position, Integer priority, BiFunction<IntersectionEvent, Map<String, Object>, String> callback) {
+    public static void at(String location, String position, Integer priority, IntersectionHandler callback) {
         List<Intersection> callbacks = INTERSECTORS.get(location + "$$" + position);
 
         if (position == null) {
@@ -106,7 +115,7 @@ public class Intersection {
      * @param position the intersection point position name
      * @param callback the actualy callback
      */
-    public static void at(String location, String position, BiFunction<IntersectionEvent, Map<String, Object>, String> callback) {
+    public static void at(String location, String position, IntersectionHandler callback) {
         at(location, position, Integer.MAX_VALUE, callback);
     }
 
@@ -117,7 +126,7 @@ public class Intersection {
      * @param location the intersection point location name
      * @param callback the actualy callback
      */
-    public static void at(String location, BiFunction<IntersectionEvent, Map<String, Object>, String> callback) {
+    public static void at(String location, IntersectionHandler callback) {
         at(location, "", Integer.MAX_VALUE, callback);
     }
 }

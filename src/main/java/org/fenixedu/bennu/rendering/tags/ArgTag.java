@@ -9,7 +9,10 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 
 /**
- * Created by borgez on 31-03-2015.
+ * This tag is used to add arguments to the intersection point. This should be used in conjunction with a
+ * intersection point.
+ *
+ * @author Artur Ventura (artur.ventura@tecnico.pt)
  */
 public class ArgTag extends SimpleTagSupport {
 
@@ -28,18 +31,40 @@ public class ArgTag extends SimpleTagSupport {
         }
     }
 
+    /**
+     * Returns the key for this argument
+     *
+     * @return the key
+     */
     public String getKey() {
         return key;
     }
 
+    /**
+     * Sets the key for this argument
+     *
+     * @param key the key
+     */
     public void setKey(String key) {
         this.key = key;
     }
 
+
+    /**
+     * Returns the value for this argument
+     *
+     * @return the value
+     */
     public Object getValue() {
         return value;
     }
 
+
+    /**
+     * Sets the key for this argument
+     *
+     * @param value the argument
+     */
     public void setValue(Object value) {
         this.value = value;
     }
