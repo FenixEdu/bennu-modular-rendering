@@ -18,8 +18,9 @@ import java.util.*;
  */
 public class Intersection {
 
-    private static final Map<String, List<Intersection>> INTERSECTORS = new HashMap<>();
+    private static final Map<String, List<Intersection>> INTERSECTIONS = new HashMap<>();
     private static final Logger LOGGER = LoggerFactory.getLogger(Intersection.class);
+
     private int priority = Integer.MAX_VALUE;
     private String location;
     private String position;
@@ -57,7 +58,7 @@ public class Intersection {
             possibleArgs = args;
         }
         Map<String, Object> arguments = Collections.unmodifiableMap(possibleArgs);
-        Optional.ofNullable(INTERSECTORS.get(getKey(location, pos)))
+        Optional.ofNullable(INTERSECTIONS.get(getKey(location, pos)))
                 .ifPresent(handlers -> handlers.stream().sorted(Comparator.comparingInt(x -> x.priority)).map((x) -> {
                     try {
                         return x.callback.apply(new IntersectionEvent(location, pos, x.priority), arguments);
@@ -91,7 +92,7 @@ public class Intersection {
      * @param callback the actualy callback
      */
     public static RegistrationHandler at(String location, String position, Integer priority, IntersectionHandler callback) {
-        List<Intersection> callbacks = INTERSECTORS.get(getKey(location, position));
+        List<Intersection> callbacks = INTERSECTIONS.get(getKey(location, position));
 
         if (position == null) {
             position = "";
@@ -99,7 +100,7 @@ public class Intersection {
 
         if (callbacks == null) {
             callbacks = new ArrayList<>();
-            INTERSECTORS.put(getKey(location, position), callbacks);
+            INTERSECTIONS.put(getKey(location, position), callbacks);
         }
 
         int pri;
@@ -151,9 +152,13 @@ public class Intersection {
          * This method removes the intersection point handler, that was registered when this handler was created.
          */
         public void unregister() {
-            List<Intersection> intersections = INTERSECTORS.get(getKey(Intersection.this.location, Intersection.this.position));
+            List<Intersection> intersections = INTERSECTIONS.get(getKey(Intersection.this.location, Intersection.this.position));
             intersections.remove(Intersection.this);
         }
+    }
+
+    protected static void clear() {
+        INTERSECTIONS.clear();
     }
 }
 

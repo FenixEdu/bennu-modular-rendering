@@ -88,6 +88,6 @@ public class PebbleView implements View, IntersectionHandler {
     public void render(Map<String, Object> args, Writer writer) throws Exception {
         Map<String, Object> actual = new HashMap<>(args);
         actual.putAll(extraArguments);
-        template.evaluate(writer, args);
+        template.evaluate(writer, actual);
     }
 }
