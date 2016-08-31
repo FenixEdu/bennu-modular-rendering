@@ -1,12 +1,13 @@
 package org.fenixedu.bennu.rendering.tags;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.IOException;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspTag;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-import java.io.IOException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This tag is used to add arguments to the intersection point. This should be used in conjunction with a
@@ -49,7 +50,6 @@ public class ArgTag extends SimpleTagSupport {
         this.key = key;
     }
 
-
     /**
      * Returns the value for this argument
      *
@@ -58,7 +58,6 @@ public class ArgTag extends SimpleTagSupport {
     public Object getValue() {
         return value;
     }
-
 
     /**
      * Sets the key for this argument

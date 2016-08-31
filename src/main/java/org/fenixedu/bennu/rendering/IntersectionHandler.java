@@ -1,9 +1,8 @@
 package org.fenixedu.bennu.rendering;
 
-import org.fenixedu.bennu.rendering.view.View;
-
 import java.util.Map;
 
+import org.fenixedu.bennu.rendering.view.View;
 
 @FunctionalInterface
 public interface IntersectionHandler {

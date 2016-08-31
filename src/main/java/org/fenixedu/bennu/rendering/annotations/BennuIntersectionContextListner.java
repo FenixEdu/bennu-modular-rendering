@@ -1,6 +1,16 @@
 package org.fenixedu.bennu.rendering.annotations;
 
-import com.mitchellbosecke.pebble.error.PebbleException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.annotation.Annotation;
+import java.util.Set;
+
+import javax.servlet.ServletContainerInitializer;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.HandlesTypes;
+
 import org.fenixedu.bennu.rendering.Intersection;
 import org.fenixedu.bennu.rendering.IntersectionHandler;
 import org.fenixedu.bennu.rendering.view.StringView;
@@ -8,17 +18,9 @@ import org.fenixedu.bennu.rendering.view.pebble.PebbleView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.servlet.ServletContainerInitializer;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.annotation.HandlesTypes;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.annotation.Annotation;
-import java.util.Set;
+import com.mitchellbosecke.pebble.error.PebbleException;
 
-@HandlesTypes({BennuIntersection.class, BennuIntersections.class})
+@HandlesTypes({ BennuIntersection.class, BennuIntersections.class })
 public class BennuIntersectionContextListner implements ServletContainerInitializer {
     private final static Logger LOGGER = LoggerFactory.getLogger(BennuIntersectionContextListner.class);
 
@@ -82,7 +84,6 @@ public class BennuIntersectionContextListner implements ServletContainerInitiali
 
         }
     }
-
 
     private boolean isPebbleAvailable() {
         try {

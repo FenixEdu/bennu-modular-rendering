@@ -10,7 +10,6 @@ public class IntersectionEvent {
     private String position;
     private int priority;
 
-
     protected IntersectionEvent(String location, String position, int priority) {
         this.location = location;
         this.position = position;

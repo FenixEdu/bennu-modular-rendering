@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * Created by borgez on 06-04-2015.
  */
-@Target({ElementType.TYPE})
+@Target({ ElementType.TYPE })
 @Retention(RetentionPolicy.RUNTIME)
 public @interface BennuIntersections {
     BennuIntersection[] value();

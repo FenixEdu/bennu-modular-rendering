@@ -1,13 +1,14 @@
 package org.fenixedu.bennu.rendering.tags;
 
-import org.fenixedu.bennu.rendering.Intersection;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
-import java.util.HashMap;
-import java.util.Map;
+
+import org.fenixedu.bennu.rendering.Intersection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This tag can be use to define a intersection point within a JSP file. If you need to add some arguments to the map

@@ -18,88 +18,79 @@ import com.mitchellbosecke.pebble.template.PebbleTemplateImpl;
 
 class IntersectNode extends AbstractRenderableNode {
 
-	private static Writer NULL_WRITER = new Writer() {
+    private static Writer NULL_WRITER = new Writer() {
 
-		@Override
-		public void write(char[] cbuf, int off, int len) throws IOException {
-		}
+        @Override
+        public void write(char[] cbuf, int off, int len) throws IOException {
+        }
 
-		@Override
-		public void flush() throws IOException {
-		}
+        @Override
+        public void flush() throws IOException {
+        }
 
-		@Override
-		public void close() throws IOException {
-		}
-	};
+        @Override
+        public void close() throws IOException {
+        }
+    };
 
-	private Expression<?> location;
-	private Expression<?> position;
-	private Expression<?> priority;
-	private BodyNode body;
+    private Expression<?> location;
+    private Expression<?> position;
+    private Expression<?> priority;
+    private BodyNode body;
 
-	protected IntersectNode(int lineNumber, Expression<?> location,
-			Expression<?> position, Expression<?> priority, BodyNode body) {
-		super(lineNumber);
-		this.location = location;
-		this.position = position;
-		this.priority = priority;
-		this.body = body;
-	}
+    protected IntersectNode(int lineNumber, Expression<?> location, Expression<?> position, Expression<?> priority, BodyNode body) {
+        super(lineNumber);
+        this.location = location;
+        this.position = position;
+        this.priority = priority;
+        this.body = body;
+    }
 
-	@Override
-	public void render(PebbleTemplateImpl self, Writer writer,
-			EvaluationContext context) throws PebbleException, IOException {
-		Map<String, Object> intersect = new HashMap<>();
+    @Override
+    public void render(PebbleTemplateImpl self, Writer writer, EvaluationContext context) throws PebbleException, IOException {
+        Map<String, Object> intersect = new HashMap<>();
 
-		String location = null;
+        String location = null;
 
-		if (this.location != null) {
-			location = Optional
-					.ofNullable(this.location.evaluate(self, context))
-					.map(x -> x.toString())
-					.orElseThrow(
-							() -> new PebbleException(
-									new NullPointerException(),
-									"Missing Location on Intersection"));
-		} else {
-			throw new PebbleException(new NullPointerException(),
-					"Missing Location on Intersection");
-		}
+        if (this.location != null) {
+            location =
+                    Optional.ofNullable(this.location.evaluate(self, context))
+                            .map(x -> x.toString())
+                            .orElseThrow(
+                                    () -> new PebbleException(new NullPointerException(), "Missing Location on Intersection"));
+        } else {
+            throw new PebbleException(new NullPointerException(), "Missing Location on Intersection");
+        }
 
-		String position = null;
+        String position = null;
 
-		if (this.position != null) {
-			position = Optional
-					.ofNullable(this.location.evaluate(self, context))
-					.map(x -> x.toString()).orElse(null);
-		}
+        if (this.position != null) {
+            position = Optional.ofNullable(this.location.evaluate(self, context)).map(x -> x.toString()).orElse(null);
+        }
 
-		String priority = null;
+        String priority = null;
 
-		if (this.priority != null) {
-			priority = Optional
-					.ofNullable(this.location.evaluate(self, context))
-					.map(x -> x.toString()).orElse(null);
-		}
+        if (this.priority != null) {
+            priority = Optional.ofNullable(this.location.evaluate(self, context)).map(x -> x.toString()).orElse(null);
+        }
 
-		Map<String, Object> args = new HashMap<String, Object>();
-		intersect.put("location", location);
-		intersect.put("position", position);
-		intersect.put("priority", priority);
-		intersect.put("args", args);
+        Map<String, Object> args = new HashMap<String, Object>();
+        intersect.put("location", location);
+        intersect.put("position", position);
+        intersect.put("priority", priority);
+        intersect.put("args", args);
 
-		context.pushScope(null);
-		context.put("intersect", intersect);
-		body.render(self, NULL_WRITER, context);
-		context.popScope();
+        context.pushScope(null);
+        context.put("intersect", intersect);
+        body.render(self, NULL_WRITER, context);
+        context.popScope();
 
-		Intersection.generate(location, position, args, writer);
-	}
+        Intersection.generate(location, position, args, writer);
+    }
 
-	@Override
-	public void accept(NodeVisitor visitor) {
-		visitor.visit(this);
-	}
+    @Override
+    public void accept(NodeVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

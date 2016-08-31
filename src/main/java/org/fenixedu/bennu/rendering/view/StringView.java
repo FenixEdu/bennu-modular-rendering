@@ -1,11 +1,10 @@
 package org.fenixedu.bennu.rendering.view;
 
-import org.fenixedu.bennu.rendering.Intersection;
-import org.fenixedu.bennu.rendering.IntersectionEvent;
-import org.fenixedu.bennu.rendering.IntersectionHandler;
-
 import java.io.Writer;
 import java.util.Map;
+
+import org.fenixedu.bennu.rendering.IntersectionEvent;
+import org.fenixedu.bennu.rendering.IntersectionHandler;
 
 /**
  * This view is a simple implementation that allows a simple string to be returned
@@ -20,7 +19,7 @@ public class StringView implements View, IntersectionHandler {
     }
 
     @Override
-    public void render(Map<String, Object> args, Writer writer) throws Exception{
+    public void render(Map<String, Object> args, Writer writer) throws Exception {
         writer.append(partial);
     }
 

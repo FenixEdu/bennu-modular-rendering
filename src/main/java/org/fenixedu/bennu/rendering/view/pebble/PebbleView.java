@@ -1,19 +1,24 @@
 package org.fenixedu.bennu.rendering.view.pebble;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.Writer;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.fenixedu.bennu.rendering.IntersectionEvent;
+import org.fenixedu.bennu.rendering.IntersectionHandler;
+import org.fenixedu.bennu.rendering.view.View;
+
 import com.mitchellbosecke.pebble.PebbleEngine;
 import com.mitchellbosecke.pebble.error.LoaderException;
 import com.mitchellbosecke.pebble.error.PebbleException;
 import com.mitchellbosecke.pebble.loader.ClasspathLoader;
 import com.mitchellbosecke.pebble.loader.StringLoader;
 import com.mitchellbosecke.pebble.template.PebbleTemplate;
-import org.fenixedu.bennu.rendering.IntersectionEvent;
-import org.fenixedu.bennu.rendering.IntersectionHandler;
-import org.fenixedu.bennu.rendering.view.View;
-
-import java.io.*;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 public class PebbleView implements View, IntersectionHandler {
 
@@ -73,7 +78,8 @@ public class PebbleView implements View, IntersectionHandler {
         return new PebbleView(engine.getTemplate(templateName));
     }
 
-    public static PebbleView withEngine(String templateName, PebbleEngine engine, Map<String, Object> extraArgs) throws PebbleException {
+    public static PebbleView withEngine(String templateName, PebbleEngine engine, Map<String, Object> extraArgs)
+            throws PebbleException {
         PebbleView pv = new PebbleView(engine.getTemplate(templateName));
         pv.extraArguments = extraArgs;
         return pv;

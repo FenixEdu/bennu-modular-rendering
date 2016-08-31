@@ -9,26 +9,25 @@ import com.mitchellbosecke.pebble.tokenParser.AbstractTokenParser;
 
 public class ArgTokenParser extends AbstractTokenParser {
 
-	@Override
-	public String getTag() {
-		return "arg";
-	}
+    @Override
+    public String getTag() {
+        return "arg";
+    }
 
-	@Override
-	public RenderableNode parse(Token token) throws ParserException {
-		TokenStream stream = this.parser.getStream();
-		int lineNumber = token.getLineNumber();
+    @Override
+    public RenderableNode parse(Token token) throws ParserException {
+        TokenStream stream = this.parser.getStream();
+        int lineNumber = token.getLineNumber();
 
-		stream.next();
-		
-		Expression<?> key = this.parser.getExpressionParser().parseExpression();
-		
-		Expression<?> value = this.parser.getExpressionParser()
-				.parseExpression();
-		
-		stream.expect(Token.Type.EXECUTE_END);
-		
-		return new ArgNode(lineNumber, key, value);
-	}
+        stream.next();
+
+        Expression<?> key = this.parser.getExpressionParser().parseExpression();
+
+        Expression<?> value = this.parser.getExpressionParser().parseExpression();
+
+        stream.expect(Token.Type.EXECUTE_END);
+
+        return new ArgNode(lineNumber, key, value);
+    }
 
 }
