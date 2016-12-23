@@ -19,7 +19,7 @@
 
 	<properties>
 		<version.javax.servlet.jsp.jsp.api>2.2.1-b03</version.javax.servlet.jsp.jsp.api>
-		<version.com.mitchellbosecke.pebble>1.4.0</version.com.mitchellbosecke.pebble>
+		<version.com.mitchellbosecke.pebble>2.3.0</version.com.mitchellbosecke.pebble>
 	</properties>
 
 	<issueManagement>

@@ -40,7 +40,7 @@ import com.mitchellbosecke.pebble.template.PebbleTemplate;
 
 public class PebbleView implements View, IntersectionHandler {
 
-    private static final PebbleEngine FROM_FILES = new PebbleEngine(new ClasspathLoader() {
+    private static final PebbleEngine FROM_FILES = new PebbleEngine.Builder().loader(new ClasspathLoader() {
         @Override
         public Reader getReader(String templateName) throws LoaderException {
             InputStream stream = PebbleView.class.getResourceAsStream(templateName);
@@ -50,9 +50,9 @@ public class PebbleView implements View, IntersectionHandler {
                 throw new LoaderException(new FileNotFoundException(), "Template file '" + templateName + "' was not found");
             }
         }
-    });
+    }).build();
 
-    private static final PebbleEngine WITH_CONTENT = new PebbleEngine(new StringLoader());
+    private static final PebbleEngine WITH_CONTENT = new PebbleEngine.Builder().loader(new StringLoader()).build();
 
     private PebbleTemplate template;
     private Map<String, Object> extraArguments = Collections.emptyMap();

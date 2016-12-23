@@ -24,6 +24,7 @@ import com.mitchellbosecke.pebble.lexer.TokenStream;
 import com.mitchellbosecke.pebble.node.BodyNode;
 import com.mitchellbosecke.pebble.node.RenderableNode;
 import com.mitchellbosecke.pebble.node.expression.Expression;
+import com.mitchellbosecke.pebble.parser.Parser;
 import com.mitchellbosecke.pebble.parser.StoppingCondition;
 import com.mitchellbosecke.pebble.tokenParser.AbstractTokenParser;
 
@@ -36,13 +37,13 @@ class IntersectTokenParser extends AbstractTokenParser {
     }
 
     @Override
-    public RenderableNode parse(Token token) throws ParserException {
-        TokenStream stream = this.parser.getStream();
+    public RenderableNode parse(Token token,Parser parser) throws ParserException {
+        TokenStream stream = parser.getStream();
         int lineNumber = token.getLineNumber();
 
         stream.next();
 
-        Expression<?> location = this.parser.getExpressionParser().parseExpression();
+        Expression<?> location = parser.getExpressionParser().parseExpression();
 
         Expression<?> position = null;
         Expression<?> priority = null;
@@ -52,18 +53,18 @@ class IntersectTokenParser extends AbstractTokenParser {
 
         // expect a name or string for the new block
         if (!positionToken.test(Token.Type.EXECUTE_END)) {
-            position = this.parser.getExpressionParser().parseExpression();
+            position = parser.getExpressionParser().parseExpression();
 
             Token priorityToken = stream.current();
 
             if (!priorityToken.test(Token.Type.EXECUTE_END)) {
-                priority = this.parser.getExpressionParser().parseExpression();
+                priority = parser.getExpressionParser().parseExpression();
             }
         }
 
         stream.expect(Token.Type.EXECUTE_END);
 
-        BodyNode intersectBody = this.parser.subparse(new StoppingCondition() {
+        BodyNode intersectBody = parser.subparse(new StoppingCondition() {
 
             @Override
             public boolean evaluate(Token token) {
