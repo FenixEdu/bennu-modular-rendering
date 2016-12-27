@@ -43,7 +43,7 @@ public class PebbleView implements View, IntersectionHandler {
     private static final PebbleEngine FROM_FILES = new PebbleEngine.Builder().loader(new ClasspathLoader() {
         @Override
         public Reader getReader(String templateName) throws LoaderException {
-            InputStream stream = PebbleView.class.getResourceAsStream(templateName);
+            InputStream stream = PebbleView.class.getClassLoader().getResourceAsStream(templateName);
             if (stream != null) {
                 return new InputStreamReader(stream);
             } else {

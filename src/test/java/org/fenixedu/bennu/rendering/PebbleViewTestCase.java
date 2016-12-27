@@ -101,7 +101,7 @@ public class PebbleViewTestCase {
     public void testStaticFileContent() throws Exception {
         Writer writer = new StringWriter();
         final String content = "<button class=\"btn btn-default\">Button</button>";
-        PebbleView view = PebbleView.fromFile("/test/staticButton.html");
+        PebbleView view = PebbleView.fromFile("test/staticButton.html");
         view.render(Collections.emptyMap(), writer);
         String result = writer.toString();
         Assert.assertTrue("expected content was '" + content + "' but '" + result + "' was received", content.equals(result));
@@ -116,7 +116,7 @@ public class PebbleViewTestCase {
 
         final String expectedContent = String.format("user: %s, age: %d", var1.get("name"), var2.get("age"));
 
-        PebbleView view = PebbleView.fromFile("/test/dynamicUser.html");
+        PebbleView view = PebbleView.fromFile("test/dynamicUser.html");
 
         view.render(args, writer);
 
@@ -135,7 +135,7 @@ public class PebbleViewTestCase {
 
         final String expectedContent = String.format("user: %s, age: %d", var1.get("name"), var2.get("age"));
 
-        PebbleView view = PebbleView.fromFile("/test/dynamicUser.html", args);
+        PebbleView view = PebbleView.fromFile("test/dynamicUser.html", args);
 
         view.render(Collections.emptyMap(), writer);
 
