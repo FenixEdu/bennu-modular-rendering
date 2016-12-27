@@ -42,7 +42,7 @@ class ArgNode extends AbstractRenderableNode {
 
     @Override
     public void render(PebbleTemplateImpl self, Writer writer, EvaluationContext context) throws PebbleException, IOException {
-        Object obj = context.get("intersect");
+        Object obj = context.getScopeChain().get("intersect");
         if (obj != null) {
             @SuppressWarnings("unchecked")
             Map<String, Object> map = (Map<String, Object>) obj;

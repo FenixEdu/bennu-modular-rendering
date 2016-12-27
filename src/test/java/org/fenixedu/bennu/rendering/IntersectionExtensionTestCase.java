@@ -45,8 +45,7 @@ public class IntersectionExtensionTestCase {
 
 	@Before
 	public void setUp() {
-		engine = new PebbleEngine(new StringLoader());
-		engine.addExtension(new IntersectionExtension());
+		engine = new PebbleEngine.Builder().loader(new StringLoader()).extension(new IntersectionExtension()).build();
 	}
 
 	@Test

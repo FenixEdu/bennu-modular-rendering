@@ -98,10 +98,10 @@ class IntersectNode extends AbstractRenderableNode {
         intersect.put("priority", priority);
         intersect.put("args", args);
 
-        context.pushScope(null);
-        context.put("intersect", intersect);
+        context.getScopeChain().pushScope(null);
+        context.getScopeChain().put("intersect", intersect);
         body.render(self, NULL_WRITER, context);
-        context.popScope();
+        context.getScopeChain().popScope();
 
         Intersection.generate(location, position, args, writer);
     }
