@@ -9,7 +9,7 @@
 	</parent>
 
 	<artifactId>bennu-modular-rendering</artifactId>
-	<version>2.0.0</version>
+	<version>DEV-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Bennu Modular Rendering</name>
@@ -33,7 +33,7 @@
 		<connection>scm:git:git@repo.dsi.tecnico.ulisboa.pt:bennu/application/bennu-modular-rendering.git</connection>
 		<developerConnection>scm:git:git@repo.dsi.tecnico.ulisboa.pt:bennu/application/bennu-modular-rendering</developerConnection>
 		<url>https://repo.dsi.tecnico.ulisboa.pt/bennu/application/bennu-modular-rendering</url>
-		<tag>v2.0.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<dependencies>
